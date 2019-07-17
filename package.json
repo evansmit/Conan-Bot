@@ -1,0 +1,23 @@
+{
+    "name": "cascadeexiles-bot",
+    "version": "1.0.0",
+    "description": "Cascade Exiles bot",
+    "main": "index.js",
+    "author": "Michael Evans",
+    "scripts": {
+        "pretest": "eslint --ignore-path .gitignore .",
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "node index.js"
+    },
+    "dependencies": {
+        "discord.js": "latest",
+        "index.js": "0.0.3",
+        "sqlite3": "~4.0.1",
+        "bluebird": "latest",
+        "node-schedule": "latest"
+    },
+    "devDependencies": {
+        "eslint": "^6.0.1",
+        "eslint-config-strongloop": "^2.1.0"
+    }
+}
