@@ -3,8 +3,9 @@ module.exports = {
   name: 'bounty',
   description: 'Commands to Add, Remove, List bounties',
   execute(message, args) {
+    const config = require('../config/config.js')
     const AppDAO = require('../modules/dao')
-    const dao = new AppDAO('./database.sqlite3')
+    const dao = new AppDAO('./' + (config.get('env')) + '-database.sqlite3')
     const BountyRepository = require('../modules/bounty_repository')
     const bountyRepo = new BountyRepository(dao)
     let bountyId
@@ -74,7 +75,7 @@ module.exports = {
       bountyRepo.createTable()
         .then(() => bountyRepo.getAll()
           .then((rows) => {
-            if (rows === 0) {
+            if (rows == 0) {
               message.channel.send({embed: {
                 title: 'Cascader Bounty',
                 description: 'There are no open bounties.',
@@ -148,15 +149,15 @@ module.exports = {
           fields: [
             {
               name: 'Description',
-              value: `Unexpected command. --${command} is not an accepted command.`,
+              value: `Unexpected command. :${command} is not an accepted command.`,
             },
             {
               name: 'Add Bounty',
-              value: '!bounty --add --<target> --<reward>',
+              value: '!bounty :add :<target> :<reward>',
             },
             {
               name: 'List Bounties',
-              value: '!bounty --list',
+              value: '!bounty :list',
             },
             {
               name: 'Remove Bounty',

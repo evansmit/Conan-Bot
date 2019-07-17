@@ -61,4 +61,4 @@ typings/
 .next
 
 #config file with token
-auth.json
+./config/auth.json
