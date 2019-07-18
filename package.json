@@ -1,7 +1,7 @@
 {
-    "name": "cascadeexiles-bot",
+    "name": "conan-bot",
     "version": "1.0.0",
-    "description": "Cascade Exiles bot",
+    "description": "Conan bot",
     "main": "index.js",
     "author": "Michael Evans",
     "scripts": {
