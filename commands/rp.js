@@ -1,7 +1,11 @@
 // rp.js
+
 module.exports = {
   name: 'rp',
   description: 'Handles creating and modifying raid protection',
+  args: true,
+  guildOnly: true,
+  cooldown: 5,
   execute(message, args) {
     const config = require('../config/config.js')
     const AppDAO = require('../modules/dao')

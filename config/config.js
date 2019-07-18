@@ -49,6 +49,11 @@ var config = convict({
     format: String,
     default: '',
   },
+  reset_remind_time: {
+    doc: 'cron table for the server reset notification',
+    format: String,
+    default: '',
+  },
 })
 
 // Load environment dependent configuration

@@ -25,3 +25,9 @@ Commands give you the ability to add clans to a raid protection list that can be
 * !rp ;event ;*clanname*
 * !rp ;list
 * !rp ;help
+
+# Welcome Message #
+A welcome message is sent to new users who join the guild server. Message is sent a DM directly to individuals and directs them to the read_me_first and stop_and_identify channels to read.
+
+# Server reset reminder #
+There is a built in server reset reminder that runs using the node-schedule package. This runs based on cron schedule configured in the .env json file and config.js per environment.
