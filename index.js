@@ -1,7 +1,7 @@
 const fs = require('fs')
 const Discord = require('discord.js')
-const { prefix } = require('./config.json')
-const { token } = require('./auth.json')
+const { token } = require('./config/auth.json')
+var config = require('./config/config.js')
 
 const client = new Discord.Client()
 client.commands = new Discord.Collection()
@@ -18,9 +18,9 @@ client.on('ready', () => {
 });
 
 client.on('message', message => {
-  if (!message.content.startsWith(prefix) || message.author.bot) return;
+  if (!message.content.startsWith((config.get('prefix'))) || message.author.bot) return;
 
-  const args = message.content.slice(prefix.length).split(/ :/)
+  const args = message.content.slice((config.get('prefix')).length).split(/ ;/)
   const commandName = args.shift().toLowerCase()
 
   if (!client.commands.has(commandName)) return
@@ -30,7 +30,7 @@ client.on('message', message => {
   if (command.args && !args.length) {
     let reply = `You didn't provide any arguments, ${message.author}!`
     if (command.usage) {
-      reply += `\nThe proper usage would be: \`${prefix}${command.name} ${command.usage}\``
+      reply += `\nThe proper usage would be: \`${(config.get('prefix'))}${command.name} ${command.usage}\``
     }
     return message.channel.send(reply)
   }

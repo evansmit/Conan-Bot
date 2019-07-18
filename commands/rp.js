@@ -3,8 +3,9 @@ module.exports = {
   name: 'rp',
   description: 'Handles creating and modifying raid protection',
   execute(message, args) {
+    const config = require('../config/config.js')
     const AppDAO = require('../modules/dao')
-    const dao = new AppDAO('./database.sqlite3')
+    const dao = new AppDAO('./' + (config.get('env')) + '-database.sqlite3')
     const RpRepository = require('../modules/raid_repository')
     const rpRepo = new RpRepository(dao)
 
@@ -50,7 +51,7 @@ module.exports = {
       rpRepo.createTable()
         .then(() => rpRepo.getAll()
           .then((rows) => {
-            if (rows === 0) {
+            if (rows == 0) {
               message.channel.send({embed: {
                 title: 'Raid Protection List',
                 description: 'No Active Raid Protections.',
