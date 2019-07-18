@@ -64,4 +64,4 @@ typings/
 ./config/auth.json
 
 #sqlite
-.sqlite3
+*.sqlite3
