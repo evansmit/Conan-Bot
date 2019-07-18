@@ -1,7 +1,11 @@
 // bounty.js
+
 module.exports = {
   name: 'bounty',
   description: 'Commands to Add, Remove, List bounties',
+  args: true,
+  guildOnly: true,
+  cooldown: 5,
   execute(message, args) {
     const config = require('../config/config.js')
     const AppDAO = require('../modules/dao')
@@ -9,7 +13,6 @@ module.exports = {
     const BountyRepository = require('../modules/bounty_repository')
     const bountyRepo = new BountyRepository(dao)
     let bountyId
-    var channelname
     var command = args[0]
 
     function bountyadd(args){

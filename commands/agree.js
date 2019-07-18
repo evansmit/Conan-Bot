@@ -1,7 +1,10 @@
 // agree.js
+
 module.exports = {
   name: 'agree',
-  description: 'Agree to terms of server and promote to Cascader',
+  description: 'Agree to terms of server and promote role',
+  guildOnly: true,
+  cooldown: 5,
   execute(message) {
     const config = require('../config/config.js')
     let channelid = message.channel.id;
