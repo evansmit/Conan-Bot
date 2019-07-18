@@ -10,18 +10,18 @@ Each argument is seperated by a semi-colon (;) allowing strings to be utilized.
 # Bounties #
 Commands give you the ability to add a bounty with a target and reward, delete existing bounties based on the bountyid and list all bounties.
 ## commands ##
-!bounty ;add ;*targetname* ;*reward*
-!bounty ;remove ;*bountyid*
-!bounty ;list
-!bounty ;help
+* !bounty ;add ;*targetname* ;*reward*
+* !bounty ;remove ;*bountyid*
+* !bounty ;list
+* !bounty ;help
 
 # Raid Protection #
 Commands give you the ability to add clans to a raid protection list that can be view for verifying whether clans are under protection. Allows clans to add protection for Raids, Hiatus, New server members, events, and list all active protections.
 
 ## commands ##
-!rp ;newbie ;clanname
-!rp ;raid ;clanname
-!rp ;hiatus ;clanname
-!rp ;event ;clanname
-!rp ;list
-!rp ;help
+* !rp ;newbie ;*clanname*
+* !rp ;raid ;*clanname*
+* !rp ;hiatus ;*clanname*
+* !rp ;event ;*clanname*
+* !rp ;list
+* !rp ;help
