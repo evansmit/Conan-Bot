@@ -4,8 +4,8 @@ module.exports = {
   description: 'Agree to terms of server and promote to Cascader',
   execute(message) {
     const config = require('../config/config.js')
-    let channelname = message.channel.name;
-    if (channelname !== 'stop_and_identify'){
+    let channelid = message.channel.id;
+    if (channelid !== (config.get('stop_and_identify_id'))){
       message.delete()
     } else {
       let role = message.guild.roles.find(role => role.name === (config.get('guild_member')))

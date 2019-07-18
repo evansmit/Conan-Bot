@@ -9,6 +9,7 @@ module.exports = {
     const BountyRepository = require('../modules/bounty_repository')
     const bountyRepo = new BountyRepository(dao)
     let bountyId
+    var channelname
     var command = args[0]
 
     function bountyadd(args){
@@ -118,58 +119,61 @@ module.exports = {
           },
           {
             name: 'Add Bounty',
-            value: '!bounty :add :<target> :<reward>',
+            value: '!bounty ;add ;<target> ;<reward>',
           },
           {
             name: 'List Bounties',
-            value: '!bounty :list',
+            value: '!bounty ;list',
           },
           {
             name: 'Remove Bounty',
-            value: '!bounty :<bountyid>',
+            value: '!bounty ;<bountyid>',
           },
         ],
       }})
     }
-    switch (command) {
-      case 'add':
-        bountyadd(args)
-        break
-      case 'list':
-        bountylist(args)
-        break
-      case 'remove':
-        bountyremove(args)
-        break
-      case 'help':
-        help()
-        break
-      default:
-        message.reply({embed: {
-          fields: [
-            {
-              name: 'Description',
-              value: `Unexpected command. :${command} is not an accepted command.`,
-            },
-            {
-              name: 'Add Bounty',
-              value: '!bounty :add :<target> :<reward>',
-            },
-            {
-              name: 'List Bounties',
-              value: '!bounty :list',
-            },
-            {
-              name: 'Remove Bounty',
-              value: '!bounty --<bountyid>',
-            },
-            {
-              name: 'Bounty Help',
-              value: '!bounty --help',
-            },
-          ],
-        }})
-        break
+    var channelid = message.channel.id;
+    if (channelid == (config.get('bounty_board_id'))){
+      switch (command) {
+        case 'add':
+          bountyadd(args)
+          break
+        case 'list':
+          bountylist(args)
+          break
+        case 'remove':
+          bountyremove(args)
+          break
+        case 'help':
+          help()
+          break
+        default:
+          message.reply({embed: {
+            fields: [
+              {
+                name: 'Description',
+                value: `Unexpected command. ;${command} is not an accepted command.`,
+              },
+              {
+                name: 'Add Bounty',
+                value: '!bounty ;add ;<target> ;<reward>',
+              },
+              {
+                name: 'List Bounties',
+                value: '!bounty ;list',
+              },
+              {
+                name: 'Remove Bounty',
+                value: '!bounty ;<bountyid>',
+              },
+              {
+                name: 'Bounty Help',
+                value: '!bounty ;help',
+              },
+            ],
+          }})
+          break
+      }
     }
   },
 }

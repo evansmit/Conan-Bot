@@ -26,7 +26,7 @@ module.exports = {
         .then((data) => {
           message.channel.send({embed: {
             title: `Raid Protection Initiated by ${message.author.username}`,
-            description: `Clan:  ${clan}`,
+            description: `Clan: ${clan}`,
             fields: [
               {
                 name: 'ProtectionType',
@@ -61,7 +61,7 @@ module.exports = {
               rows.forEach(function(rp) {
                 message.channel.send({embed: {
                   title: 'Raid Protection List',
-                  description: `Clan:  ${rp.Clan}`,
+                  description: `Clan: ${rp.Clan}`,
                   fields: [
                     {
                       name: 'ProtectionType',
@@ -99,11 +99,11 @@ module.exports = {
           },
           {
             name: 'newbie protection',
-            value: '!rp :newbie :clanname',
+            value: '!rp ;newbie ;clanname',
           },
           {
             name: 'raid protection',
-            value: '!rp :raid :clanname',
+            value: '!rp ;raid ;clanname',
           },
           {
             name: 'hiatus protection',
@@ -111,66 +111,69 @@ module.exports = {
           },
           {
             name: 'event protection',
-            value: '!rp :event :clanname',
+            value: '!rp ;event ;clanname',
           },
         ],
       }})
     }
     // sets up rp database if it doesn't exist.
     var days
-    switch (protectiontype) {
-      case 'newbie':
-        days = Number('5')
-        rpset(protectiontype, clan, days)
-        break
-      case 'raid':
-        days = Number('3')
-        rpset(protectiontype, clan, days)
-        break
-      case 'hiatus':
-        days = Number('8')
-        rpset(protectiontype, clan, days)
-        break
-      case 'event':
-        days = Number('0')
-        rpset(protectiontype, clan, days)
-        break
-      case 'list':
-        rpstatus()
-        break
-      case 'help':
-        help()
-        break
-      default:
-        message.reply({embed: {
-          fields: [
-            {
-              name: 'Description',
-              value: `Unexpected command. :${protectiontype} is not an accepted command.`,
-            },
-            {
-              name: 'newbie protection',
-              value: '!rp :newbie :clanname',
-            },
-            {
-              name: 'raid protection',
-              value: '!rp :raid :clanname',
-            },
-            {
-              name: 'hiatus protection',
-              value: '!rp --hiatus --clanname',
-            },
-            {
-              name: 'event protection',
-              value: '!rp :event :clanname',
-            },
-            {
-              name: 'Raid Protection help',
-              value: '!rp :help',
-            },
-          ],
-        }})
-        break
+    var channelid = message.channel.id;
+    if (channelid == (config.get('clan_status_id'))){
+      switch (protectiontype) {
+        case 'newbie':
+          days = Number('5')
+          rpset(protectiontype, clan, days)
+          break
+        case 'raid':
+          days = Number('3')
+          rpset(protectiontype, clan, days)
+          break
+        case 'hiatus':
+          days = Number('8')
+          rpset(protectiontype, clan, days)
+          break
+        case 'event':
+          days = Number('0')
+          rpset(protectiontype, clan, days)
+          break
+        case 'list':
+          rpstatus()
+          break
+        case 'help':
+          help()
+          break
+        default:
+          message.reply({embed: {
+            fields: [
+              {
+                name: 'Description',
+                value: `Unexpected command. :${protectiontype} is not an accepted command.`,
+              },
+              {
+                name: 'newbie protection',
+                value: '!rp ;newbie ;clanname',
+              },
+              {
+                name: 'raid protection',
+                value: '!rp ;raid ;clanname',
+              },
+              {
+                name: 'hiatus protection',
+                value: '!rp ;hiatus ;clanname',
+              },
+              {
+                name: 'event protection',
+                value: '!rp ;event ;clanname',
+              },
+              {
+                name: 'Raid Protection help',
+                value: '!rp ;help',
+              },
+            ],
+          }})
+          break
+      }
     }
   },
 }
