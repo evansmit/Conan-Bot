@@ -61,9 +61,6 @@ schedule.scheduleJob((config.get('reset_remind_time')), function(){
 var readmefirst = '<#' + (config.get('read_me_first_id')) + '>'
 var stopandidentify = '<#' + (config.get('stop_and_identify_id')) + '>'
 client.on('guildMemberAdd', member => {
-  // Send meesage to channel
-  // member.guild.channels.get('600399488896598028').send({embed: {
-  // Send message a DM to user directly
   member.send({embed: {
     description: `Welcome ${member} to Cascade Exiles! Please be sure to thoroughly read ${readmefirst} and then post in ${stopandidentify}.`,
   }})

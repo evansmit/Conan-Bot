@@ -5,7 +5,8 @@
     "read_me_first_id": "600438854801162260",
     "stop_and_identify_id": "600439120036364319",
     "clan_status_id": "600702973030694912",
+    "clan_intel_id": "601452269916913706",
     "guild_mods": "Mods",
     "guild_members": "Cascaders",
-    "reset_remind_time": "50 11 ? * *"
+    "reset_remind_time": "50 10 ? * *"
 }
