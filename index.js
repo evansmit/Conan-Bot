@@ -20,7 +20,7 @@ client.on('ready', () => {
 client.on('message', message => {
   if (!message.content.startsWith((config.get('prefix'))) || message.author.bot) return;
 
-  const args = message.content.slice((config.get('prefix')).length).split(/ ;/)
+  const args = message.content.slice((config.get('prefix')).length).split(/ +/)
   const commandName = args.shift().toLowerCase()
 
   if (!client.commands.has(commandName)) return

@@ -11,13 +11,13 @@ class BountyRepository {
       name TEXT,
       OfferedBy TEXT,
       Target TEXT,
-      Reward TEXT)`
+      Spoils TEXT)`
     return this.dao.run(sql)
   }
-  create(OfferedBy, Target, Reward) {
+  create(OfferedBy, Target, Spoils) {
     return this.dao.run(
-      'INSERT INTO bounties (OfferedBy, Target, Reward) VALUES (?, ?, ?)',
-      [OfferedBy, Target, Reward])
+      'INSERT INTO bounties (OfferedBy, Target, Spoils) VALUES (?, ?, ?)',
+      [OfferedBy, Target, Spoils])
   }
   delete(id) {
     return this.dao.run(

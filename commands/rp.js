@@ -3,38 +3,37 @@
 module.exports = {
   name: 'rp',
   description: 'Handles creating and modifying raid protection',
-  args: true,
+  args: false,
   guildOnly: true,
   cooldown: 5,
   execute(message, args) {
+    const filter = m => m.author.id === message.author.id
     const config = require('../config/config.js')
     const AppDAO = require('../modules/dao')
     const dao = new AppDAO('./' + (config.get('env')) + '-database.sqlite3')
     const RpRepository = require('../modules/raid_repository')
     const rpRepo = new RpRepository(dao)
+    var command = args[0]
+    var channelid = message.channel.id
 
-    // variables for commands to pass
-    var protectiontype = args[0]
-    var clan = args[1]
-
-    function rpset(protectiontype, clan, days) {
+    function rpset(Type, Clan, Days) {
       var startdate = new Date()
       var enddate = new Date()
-      enddate.setDate(startdate.getDate() + days)
+      enddate.setDate(startdate.getDate() + Days)
       // Code to remove split the Time settings off the variable
       startdate = startdate.toString().split(' ').slice(0, 4).join(' ')
       enddate = enddate.toString().split(' ').slice(0, 4).join(' ')
       // Create table if it doesn't exist then create entry
       rpRepo.createTable()
-        .then(() => rpRepo.create(protectiontype, clan, startdate, enddate, message.author.username))
+        .then(() => rpRepo.create(Type, Clan, startdate, enddate, message.author.username))
         .then((data) => {
           message.channel.send({embed: {
             title: `Raid Protection Initiated by ${message.author.username}`,
-            description: `Clan: ${clan}`,
+            description: `Clan: ${Clan}`,
             fields: [
               {
                 name: 'ProtectionType',
-                value: `${protectiontype}`,
+                value: `${Type}`,
                 inline: true,
               },
               {
@@ -68,7 +67,7 @@ module.exports = {
                   description: `Clan: ${rp.Clan}`,
                   fields: [
                     {
-                      name: 'ProtectionType',
+                      name: 'Type',
                       value: `${rp.ProtectionType}`,
                       inline: true,
                     },
@@ -102,45 +101,104 @@ module.exports = {
             value: 'Command used to initiate raid protection for your clan.',
           },
           {
-            name: 'newbie protection',
-            value: '!rp ;newbie ;clanname',
+            name: '!rp',
+            value: 'Prompts users for input of what type of raid protection is needed and name of clan',
           },
           {
-            name: 'raid protection',
-            value: '!rp ;raid ;clanname',
-          },
-          {
-            name: 'hiatus protection',
-            value: '!rp :hiatus :clanname',
-          },
-          {
-            name: 'event protection',
-            value: '!rp ;event ;clanname',
+            name: '!rp list',
+            value: 'Lists all protections currently in the system',
           },
         ],
       }})
     }
-    // sets up rp database if it doesn't exist.
-    var days
-    var channelid = message.channel.id;
+    function setType() {
+      return new Promise((resolve, reject) => {
+        message.channel.send('What kind of protection do you pray for from the Gods? \n  newbie\n  raid\n  hiatus\n  event')// .then(r => r.delete(10000))
+          .then(() => {
+            message.channel.awaitMessages(filter, {
+              max: 1,
+              time: 30000,
+              errors: ['time'],
+            })
+              .then((collected) => {
+                var RaidSet = new Set(['newbie', 'raid', 'hiatus', 'event'])
+                if (RaidSet.has((collected.first().content))){
+                  var Type = (collected.first().content)
+                  message.channel.send(`Your choice has been accepted: ${Type}`)
+                  resolve(Type)
+                } else {
+                  reject(Error('Your choice of protection has been rejected!'))
+                }
+              })
+              .catch(collected => { message.channel.send('Your prayer for protection was too long, if you still require protection re-submit!') })
+          })
+      })
+    }
+    function setClan() {
+      return new Promise((resolve, reject) => {
+        message.channel.send('What clan requests the Gods protection?')// .then(r => r.delete(10000))
+          .then(() => {
+            message.channel.awaitMessages(filter, {
+              max: 1,
+              time: 30000,
+              errors: ['time'],
+            })
+              .then((collected) => {
+                var Clan = (collected.first().content)
+                message.channel.send(`Your choice has been made: ${Clan}`)
+                resolve(Clan)
+              })
+              .catch(collected => { message.channel.send('Your prayer for protection was too long, if you still require protection re-submit!') })
+          })
+      })
+    }
+    function setDays(Type) {
+      var Days = ''
+      return new Promise((resolve, reject) => {
+        switch (Type) {
+          case 'newbie':
+            Days = Number('5')
+            resolve(Days)
+            break
+          case 'raid':
+            Days = Number('3')
+            resolve(Days)
+            break
+          case 'hiatus':
+            message.channel.send('How many days do you request the Gods protection?')// .then(r => r.delete(10000))
+              .then(() => {
+                message.channel.awaitMessages(filter, {
+                  max: 1,
+                  time: 30000,
+                  errors: ['time'],
+                })
+                  .then((collected) => {
+                    Days = Number((collected.first().content))
+                    message.channel.send(`Your choice has been made: ${Days}`);
+                    resolve(Days)
+                  }).catch(collected => { message.channel.send('Your request has taken to long and the Gods have rejected it!') })
+              })
+            break
+          case 'event':
+            Days = Number('0')
+            resolve(Days)
+            break
+          default:
+            reject(Error('Days have not been set!'))
+            break
+        }
+      })
+    }
+    // This will run the default command to add new raid protection.
+    async function RaidProtection() {
+      var Type = await setType()
+      var Clan = await setClan()
+      var Days = await setDays(Type)
+      rpset(Type, Clan, Days)
+      return
+    }
     if (channelid == (config.get('clan_status_id'))){
-      switch (protectiontype) {
-        case 'newbie':
-          days = Number('5')
-          rpset(protectiontype, clan, days)
-          break
-        case 'raid':
-          days = Number('3')
-          rpset(protectiontype, clan, days)
-          break
-        case 'hiatus':
-          days = Number('8')
-          rpset(protectiontype, clan, days)
-          break
-        case 'event':
-          days = Number('0')
-          rpset(protectiontype, clan, days)
-          break
+      switch (command) {
         case 'list':
           rpstatus()
           break
@@ -148,34 +206,7 @@ module.exports = {
           help()
           break
         default:
-          message.reply({embed: {
-            fields: [
-              {
-                name: 'Description',
-                value: `Unexpected command. :${protectiontype} is not an accepted command.`,
-              },
-              {
-                name: 'newbie protection',
-                value: '!rp ;newbie ;clanname',
-              },
-              {
-                name: 'raid protection',
-                value: '!rp ;raid ;clanname',
-              },
-              {
-                name: 'hiatus protection',
-                value: '!rp ;hiatus ;clanname',
-              },
-              {
-                name: 'event protection',
-                value: '!rp ;event ;clanname',
-              },
-              {
-                name: 'Raid Protection help',
-                value: '!rp ;help',
-              },
-            ],
-          }})
+          RaidProtection()
           break
       }
     }

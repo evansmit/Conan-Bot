@@ -3,7 +3,7 @@
 module.exports = {
   name: 'bounty',
   description: 'Commands to Add, Remove, List bounties',
-  args: true,
+  args: false,
   guildOnly: true,
   cooldown: 5,
   execute(message, args) {
@@ -12,33 +12,28 @@ module.exports = {
     const dao = new AppDAO('./' + (config.get('env')) + '-database.sqlite3')
     const BountyRepository = require('../modules/bounty_repository')
     const bountyRepo = new BountyRepository(dao)
+    const filter = m => m.author.id === message.author.id
     let bountyId
     var command = args[0]
+    var channelid = message.channel.id;
 
-    function bountyadd(args){
-      var Target = args[1]
-      var Reward = args[2]
+    function bountyadd(Target, Spoils){
       bountyRepo.createTable()
-        .then(() => bountyRepo.create(message.author.username, Target, Reward))
+        .then(() => bountyRepo.create(message.author.username, Target, Spoils))
         .then((data) => {
           bountyId = data.id
           message.channel.send({embed: {
             title: `New Cascader Bounty ID ${bountyId}`,
-            description: 'A new bounty has been offered!',
+            description: `${message.author.username} requires someone to crush his enemies!`,
             fields: [
-              {
-                name: 'OfferedBy',
-                value: `${message.author.username}`,
-                inline: true,
-              },
               {
                 name: 'Target',
                 value: `${Target}`,
                 inline: true,
               },
               {
-                name: 'Reward',
-                value: `${Reward}`,
+                name: 'Spoils',
+                value: `${Spoils}`,
                 inline: true,
               },
             ],
@@ -65,8 +60,8 @@ module.exports = {
                 inline: true,
               },
               {
-                name: 'Reward',
-                value: `${bounty.Reward}`,
+                name: 'Spoils',
+                value: `${bounty.Spoils}`,
                 inline: true,
               },
             ],
@@ -101,8 +96,8 @@ module.exports = {
                       inline: true,
                     },
                     {
-                      name: 'Reward',
-                      value: `${bounty.Reward}`,
+                      name: 'Spoils',
+                      value: `${bounty.Spoils}`,
                       inline: true,
                     },
                   ],
@@ -118,29 +113,78 @@ module.exports = {
         fields: [
           {
             name: 'Description',
-            value: 'This command allows users to Add, List, and Remove open bounties.',
+            value: 'This command by default allows users to open a new bounty and prompt for Target and Spoils.',
           },
           {
-            name: 'Add Bounty',
-            value: '!bounty ;add ;<target> ;<reward>',
+            name: '!bounty',
+            value: 'Add Bounty - Asks users to input a Target and a Reward for a new bounty and posts to the bounty_board channel',
           },
           {
-            name: 'List Bounties',
-            value: '!bounty ;list',
+            name: '!bounty list',
+            value: 'List Bounties - Lists all bounties currently in on the board',
           },
           {
-            name: 'Remove Bounty',
-            value: '!bounty ;<bountyid>',
+            name: '!bounty remove <bountyid>',
+            value: 'Remove Bounty - Allows a user to remove a bounty based on the BountyId retrived from !bounty list',
           },
         ],
       }})
     }
-    var channelid = message.channel.id;
+
+    function setTarget() {
+      return new Promise((resolve, reject) => {
+        message.channel.send('Which of your enemies do you request to be crushed and driven before you?')// .then(r => r.delete(10000))
+          .then(() => {
+            message.channel.awaitMessages(filter, {
+              max: 1,
+              time: 30000,
+              errors: ['time'],
+            })
+              .then(collected => {
+                if (collected.first().content === 'cancel') {
+                  message.channel.send('Your request for destruction has been cancelled.')
+                  reject(Error('Your request for destruction has been cancelled.'))
+                }
+                var Target = (collected.first().content)
+                message.channel.send('Your input has been recieved')
+                resolve(Target)
+              }).catch(collected => { message.channel.send('Your request to have an enemy crushed has timed out!') })
+          })
+      })
+    }
+
+    function setSpoils() {
+      return new Promise((resolve, reject) => {
+        message.channel.send('What spoils will be provided when your enemies are crushed?')// .then(r => r.delete(10000))
+          .then(() => {
+            message.channel.awaitMessages(filter, {
+              max: 1,
+              time: 30000,
+              errors: ['time'],
+            })
+              .then(collected => {
+                if (collected.first().content === 'cancel') {
+                  message.channel.send('Your request is canceled per your request. If you still need your enemies crushed you can re-submit.')
+                  reject(Error('Your request is canceled per your request. If you still need your enemies crushed you can re-submit.'))
+                }
+                var Spoils = (collected.first().content)
+                message.channel.send('Your input has been recieved')
+                resolve(Spoils)
+              }).catch(collected => { message.channel.send('Your request for a bounty has expired! If you still need your enemies crushed you can re-submit.') })
+          })
+      })
+    }
+
+    // This will run the default command to add new raid protection.
+    async function Bounty() {
+      var Target = await setTarget()
+      var Spoils = await setSpoils()
+      bountyadd(Target, Spoils)
+      return
+    }
+
     if (channelid == (config.get('bounty_board_id'))){
       switch (command) {
-        case 'add':
-          bountyadd(args)
-          break
         case 'list':
           bountylist(args)
           break
@@ -151,30 +195,7 @@ module.exports = {
           help()
           break
         default:
-          message.reply({embed: {
-            fields: [
-              {
-                name: 'Description',
-                value: `Unexpected command. ;${command} is not an accepted command.`,
-              },
-              {
-                name: 'Add Bounty',
-                value: '!bounty ;add ;<target> ;<reward>',
-              },
-              {
-                name: 'List Bounties',
-                value: '!bounty ;list',
-              },
-              {
-                name: 'Remove Bounty',
-                value: '!bounty ;<bountyid>',
-              },
-              {
-                name: 'Bounty Help',
-                value: '!bounty ;help',
-              },
-            ],
-          }})
+          Bounty()
           break
       }
     }

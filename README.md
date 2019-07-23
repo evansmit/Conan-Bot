@@ -10,24 +10,29 @@ Each argument is seperated by a semi-colon (;) allowing strings to be utilized.
 # Bounties #
 Commands give you the ability to add a bounty with a target and reward, delete existing bounties based on the bountyid and list all bounties.
 ## commands ##
-* !bounty ;add ;*targetname* ;*reward*
-* !bounty ;remove ;*bountyid*
-* !bounty ;list
-* !bounty ;help
+* !bounty
+* !bounty remove <bountid>
+* !bounty list
+* !bounty help
 
 # Raid Protection #
 Commands give you the ability to add clans to a raid protection list that can be view for verifying whether clans are under protection. Allows clans to add protection for Raids, Hiatus, New server members, events, and list all active protections.
-
 ## commands ##
-* !rp ;newbie ;*clanname*
-* !rp ;raid ;*clanname*
-* !rp ;hiatus ;*clanname*
-* !rp ;event ;*clanname*
-* !rp ;list
-* !rp ;help
+* !rp
+* !rp list
+* !rp help
+
+# Members #
+Commands that provide and interface to allow users to be added to a member list for the server. Prompts users for inputting (PSN ID, IGN, Clan, and Clan Ldr.) Discord users is automatically tagged and pulled in by the user input the command.
+## commands ##
+* !member
+* !member list
+* !member remove <memberid>
+* !member help
 
 # Welcome Message #
 A welcome message is sent to new users who join the guild server. Message is sent a DM directly to individuals and directs them to the read_me_first and stop_and_identify channels to read.
+Code for welcome message is stored under index.js
 
 # Server reset reminder #
 There is a built in server reset reminder that runs using the node-schedule package. This runs based on cron schedule configured in the .env json file and config.js per environment.
