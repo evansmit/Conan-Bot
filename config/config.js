@@ -39,6 +39,11 @@ var config = convict({
     format: String,
     default: '',
   },
+  clan_intel_id: {
+    doc: 'channel id fir clan_intel',
+    format: String,
+    default: '',
+  },
   guild_mods: {
     doc: 'role group for mods',
     format: String,

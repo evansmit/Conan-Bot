@@ -6,7 +6,13 @@ class rpRepository {
   }
 
   createTable() {
-    const sql = 'CREATE TABLE IF NOT EXISTS raidprotection (id INTEGER PRIMARY KEY AUTOINCREMENT,ProtectionType TEXT,Clan TEXT,StartDate Text, EndDate Text, CreatedBy TEXT)'
+    const sql = `CREATE TABLE IF NOT EXISTS raidprotection (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      ProtectionType TEXT,
+      Clan TEXT,
+      StartDate Text,
+      EndDate Text,
+      CreatedBy TEXT)`
     return this.dao.run(sql)
   }
   create(ProtectionType, Clan, StartDate, EndDate, CreatedBy) {

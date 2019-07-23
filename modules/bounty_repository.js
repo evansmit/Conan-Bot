@@ -6,13 +6,18 @@ class BountyRepository {
   }
 
   createTable() {
-    const sql = 'CREATE TABLE IF NOT EXISTS bounties (id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT,OfferedBy TEXT,Target TEXT,Reward TEXT)'
+    const sql = `CREATE TABLE IF NOT EXISTS bounties (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT,
+      OfferedBy TEXT,
+      Target TEXT,
+      Spoils TEXT)`
     return this.dao.run(sql)
   }
-  create(OfferedBy, Target, Reward) {
+  create(OfferedBy, Target, Spoils) {
     return this.dao.run(
-      'INSERT INTO bounties (OfferedBy, Target, Reward) VALUES (?, ?, ?)',
-      [OfferedBy, Target, Reward])
+      'INSERT INTO bounties (OfferedBy, Target, Spoils) VALUES (?, ?, ?)',
+      [OfferedBy, Target, Spoils])
   }
   delete(id) {
     return this.dao.run(
