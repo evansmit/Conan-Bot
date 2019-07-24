@@ -26,6 +26,8 @@ module.exports = class BountyremoveCommand extends Command {
     }
 
     run(msg, { id }) {
+        var channelid = msg.channel.id
+        if (channelid == (config.get('bounty_board_id'))){
         bountyRepo.createTable()
             bountyRepo.getById(id)
                 .then((bounty) => {
@@ -34,5 +36,6 @@ module.exports = class BountyremoveCommand extends Command {
                     return msg.say(embed)
                 })
                 .then(() => bountyRepo.delete(id))
+        }
     }
 }

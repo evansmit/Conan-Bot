@@ -32,6 +32,8 @@ module.exports = class BountyCommand extends Command {
     }
 
     run(msg, { target, spoils }) {
+        var channelid = msg.channel.id
+        if (channelid == (config.get('bounty_board_id'))){
         bountyRepo.createTable()
             .then(() => bountyRepo.create(msg.author.username, target, spoils))
             .then((data) => {
@@ -42,5 +44,6 @@ module.exports = class BountyCommand extends Command {
                     .addField('Spoils', `${spoils}`, true)
                 return msg.say(embed)
             })
+        }
     }
 }

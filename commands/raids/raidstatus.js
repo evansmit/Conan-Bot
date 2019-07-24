@@ -20,6 +20,8 @@ module.exports = class RaidCommand extends Command {
     }
 
     run(msg) {
+      var channelid = msg.channel.id
+      if (channelid == (config.get('clan_status_id'))){
       // Create table if it doesn't exist then create entry
       rpRepo.createTable()
         .then(() => rpRepo.getAll()
@@ -42,5 +44,6 @@ module.exports = class RaidCommand extends Command {
                 })
             }
         }))
+    }
     }
 }

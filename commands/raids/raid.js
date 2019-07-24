@@ -35,6 +35,8 @@ module.exports = class RaidCommand extends Command {
     }
 
     run(msg, { type, clan }) {
+      var channelid = msg.channel.id
+      if (channelid == (config.get('clan_status_id'))){
       var Days = ''
         switch (type) {
           case 'newbie':
@@ -68,5 +70,6 @@ module.exports = class RaidCommand extends Command {
                 .addField('End Date', `${enddate}`, true)
                 return msg.say(embed)
         })
+      }
   }
 }
