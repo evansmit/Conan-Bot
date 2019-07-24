@@ -61,7 +61,7 @@ typings/
 .next
 
 #config file with token
-/config/auth.json
+config/auth.json
 
 #sqlite
 *.sqlite3
