@@ -18,7 +18,9 @@ module.exports = class BountylistCommand extends Command {
         })
     }
 
-    run(msg, { target, spoils }) {
+    run(msg) {
+        var channelid = msg.channel.id
+        if (channelid == (config.get('bounty_board_id'))){
         bountyRepo.createTable()
             .then(() => bountyRepo.getAll())
             .then((rows) => {
@@ -39,5 +41,6 @@ module.exports = class BountylistCommand extends Command {
                     })
                 }
             })
+        }
     }
 }

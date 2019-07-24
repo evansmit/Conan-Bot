@@ -41,6 +41,8 @@ module.exports = class MemberCommand extends Command {
     }
 
     run(msg, { pl_psn, pl_ign, pl_clan, pl_clanldr }) {
+      var channelid = msg.channel.id
+      if (channelid == (config.get('stop_and_identify_id'))){
         MemberRepo.createTable()
             .then(() => MemberRepo.create(pl_psn, msg.author.username, pl_ign, pl_clan, pl_clanldr))
             .then((data) => {
@@ -53,5 +55,6 @@ module.exports = class MemberCommand extends Command {
                     .addField('Clan Leader', `${pl_clanldr}`, true)
                 return msg.say(embed)
             })
+        }
     }
 }

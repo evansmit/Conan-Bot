@@ -26,6 +26,8 @@ module.exports = class RaidCommand extends Command {
         })
     }
     run(msg, { id }) {
+        var channelid = msg.channel.id
+        if (channelid == (config.get('clan_status_id'))){
         RaidRepo.createTable()
         .then(() => RaidRepo.getById(id)
           .then((clan) => {
@@ -37,5 +39,6 @@ module.exports = class RaidCommand extends Command {
           })
           .then(() => RaidRepo.delete(id))
         )
+        }
     }
 }

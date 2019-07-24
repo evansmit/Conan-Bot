@@ -21,6 +21,8 @@ module.exports = class MemberCommand extends Command {
     }
 
     run(msg) {
+      var channelid = msg.channel.id
+      if (channelid == (config.get('stop_and_identify_id'))){
         MemberRepo.createTable()
         .then(() => MemberRepo.getAll()
           .then((rows) => {
@@ -36,5 +38,6 @@ module.exports = class MemberCommand extends Command {
               return msg.say(embed)
             }
         }))
+      }
     }
 }
