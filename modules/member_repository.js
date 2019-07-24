@@ -10,7 +10,7 @@ class MemberRepository {
       CREATE TABLE IF NOT EXISTS members (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       pl_psn TEXT,
-      pl_discord,
+      pl_discord TEXT,
       pl_ign TEXT,
       pl_clan TEXT,
       pl_clanldr TEXT)`
