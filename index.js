@@ -1,50 +1,38 @@
-const fs = require('fs')
-const Discord = require('discord.js')
+const Commando = require('discord.js-commando')
+const path = require('path');
+const sqlite = require('sqlite')
 const { token } = require('./config/auth.json')
 var config = require('./config/config.js')
 
-const client = new Discord.Client()
-client.commands = new Discord.Collection()
+const client = new Commando.Client({
+  commandPrefix: '!',
+  owner: '216407004724330507',
+  disableEveryone: true,
+  unknownCommandResponse: false
+})
 
-const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'))
+client.registry
+  .registerDefaultTypes()
+  // Registers your custom command groups
+  .registerGroups([
+    ['bounties', 'bounty commands group'],
+    ['members', 'member commands group'],
+    ['raids', 'raid protection commands group'],
+    ['rules', 'rules agreement commands group'],
+  ])
 
-for (const file of commandFiles) {
-  const command = require(`./commands/${file}`)
-  client.commands.set(command.name, command)
-}
+  // Registers all built-in groups, commands, and argument types
+  .registerDefaultGroups()
+  .registerDefaultCommands()
+  // Registers all of your commands in the ./commands/ directory
+  .registerCommandsIn(path.join(__dirname, 'commands'))
+
+client.setProvider(
+  sqlite.open(path.join(__dirname, 'settings.sqlite3')).then(db => new Commando.SQLiteProvider(db))
+).catch(console.error)
 
 client.on('ready', () => {
-  console.log(`Logged in as ${client.user.tag}!`)
-});
-
-client.on('message', message => {
-  if (!message.content.startsWith((config.get('prefix'))) || message.author.bot) return;
-
-  const args = message.content.slice((config.get('prefix')).length).split(/ +/)
-  const commandName = args.shift().toLowerCase()
-
-  if (!client.commands.has(commandName)) return
-
-  const command = client.commands.get(commandName)
-
-  if (command.args && !args.length) {
-    let reply = `You didn't provide any arguments, ${message.author}!`
-    if (command.usage) {
-      reply += `\nThe proper usage would be: \`${(config.get('prefix'))}${command.name} ${command.usage}\``
-    }
-    return message.channel.send(reply)
-  }
-
-  if (command.guildOnly && message.channel.type !== 'text') {
-    return message.reply('I can\'t execute that command inside DMs!');
-  }
-
-  try {
-    command.execute(message, args)
-  } catch (error) {
-    console.error(error)
-    message.reply('there was an error trying to execute that command!')
-  }
+    console.log(`Logged in as ${client.user.tag}!`);
 });
 
 // run reminder for server reset.
@@ -66,5 +54,4 @@ client.on('guildMemberAdd', member => {
   }})
 })
 
-// login to Discord with your app's token
-client.login(token);
+client.login(token)

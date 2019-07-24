@@ -1,7 +1,7 @@
 {
     "name": "conan-bot",
-    "version": "1.0.0",
-    "description": "Conan bot",
+    "version": "1.0.1",
+    "description": "Conan Exiles bot",
     "main": "index.js",
     "author": "Michael Evans",
     "scripts": {
@@ -11,8 +11,9 @@
     },
     "dependencies": {
         "discord.js": "latest",
-        "index.js": "0.0.3",
-        "sqlite3": "~4.0.1",
+        "discord.js-commando": "^0.10.0",
+        "sqlite": "latest",
+        "sqlite3": "latest",
         "bluebird": "latest",
         "node-schedule": "latest",
         "convict": "^5.0.0"
