@@ -1,1 +1,1 @@
-Get-ChildItem C:\apps\conan-bot -Exclude *.sqlite3 -Recurse | Remove-Item -Force -Verbose -Recurse
+Get-ChildItem C:\apps\conan-bot -Exclude *.sqlite3,auth.json -Recurse | Remove-Item -Force -Verbose -Recurse
