@@ -2,9 +2,6 @@ const { Command } = require('discord.js-commando')
 const { RichEmbed } = require('discord.js');
 const config = require('../../config/config.js')
 const AppDAO = require('../../modules/dao')
-const dao = new AppDAO('./' + (config.get('env')) + '-database.sqlite3')
-const BountyRepository = require('../../modules/bounty_repository')
-const bountyRepo = new BountyRepository(dao)
 
 module.exports = class BountyremoveCommand extends Command {
     constructor(client) {
@@ -26,6 +23,9 @@ module.exports = class BountyremoveCommand extends Command {
     }
 
     run(msg, { id }) {
+        const dao = new AppDAO('./database/' + msg.guild.id + '-' + (config.get('env')) + '.sqlite3')
+        const BountyRepository = require('../../modules/bounty_repository')
+        const bountyRepo = new BountyRepository(dao)
         var channelid = msg.channel.id
         if (channelid == (config.get('bounty_board_id'))){
         bountyRepo.createTable()

@@ -2,9 +2,6 @@ const { Command } = require('discord.js-commando')
 const { RichEmbed } = require('discord.js');
 const config = require('../../config/config.js')
 const AppDAO = require('../../modules/dao')
-const dao = new AppDAO('./' + (config.get('env')) + '-database.sqlite3')
-const RaidRepository = require('../../modules/raid_repository')
-const RaidRepo = new RaidRepository(dao)
 
 module.exports = class RaidCommand extends Command {
     constructor(client) {
@@ -26,6 +23,9 @@ module.exports = class RaidCommand extends Command {
         })
     }
     run(msg, { id }) {
+        const dao = new AppDAO('./database/' + msg.guild.id + '-' + (config.get('env')) + '.sqlite3')
+        const RaidRepository = require('../../modules/raid_repository')
+        const RaidRepo = new RaidRepository(dao)
         var channelid = msg.channel.id
         if (channelid == (config.get('clan_status_id'))){
         RaidRepo.createTable()
