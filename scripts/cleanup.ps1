@@ -1,0 +1,1 @@
+Get-ChildItem C:\apps\conan-bot -Exclude *.sqlite3 -Recurse | Remove-Item -Force -Verbose
