@@ -2,9 +2,7 @@ const { Command } = require('discord.js-commando')
 const { RichEmbed } = require('discord.js');
 const config = require('../../config/config.js')
 const AppDAO = require('../../modules/dao')
-const dao = new AppDAO('./' + (config.get('env')) + '-database.sqlite3')
-const MemberRepository = require('../../modules/member_repository')
-const MemberRepo = new MemberRepository(dao)
+
 var members = ''
 
 module.exports = class MemberCommand extends Command {
@@ -21,6 +19,9 @@ module.exports = class MemberCommand extends Command {
     }
 
     run(msg) {
+      const dao = new AppDAO('./database/' + msg.guild.id + '-' + (config.get('env')) + '.sqlite3')
+      const MemberRepository = require('../../modules/member_repository')
+      const MemberRepo = new MemberRepository(dao)
       var channelid = msg.channel.id
       if (channelid == (config.get('stop_and_identify_id'))){
         MemberRepo.createTable()
