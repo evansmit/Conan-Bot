@@ -1,1 +1,1 @@
-Get-ChildItem C:\apps\conan-bot -Exclude *.sqlite3,auth.json -Recurse | Where-Object {$_ -notmatch 'node_modules'} | Remove-Item -Force -Verbose -Recurse
+Get-ChildItem C:\apps\conan-bot -Exclude *.sqlite3, config\auth.json -Recurse | Remove-Item -Force -Verbose -Recurse
