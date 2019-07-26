@@ -19,29 +19,34 @@ module.exports = class BountyCommand extends Command {
                 {
                     key:'target',
                     prompt: 'Which of your enemies do you request to be crushed and driven before you?',
-                    type: 'string'
+                    type: 'string',
                 },
                 {
                     key:'spoils',
                     prompt: 'What spoils will be provided when your enemies are crushed?',
                     type: 'string'
-                }
-
+                },
+                {
+                    key:'reason',
+                    prompt: 'What is the reason for your bounty?',
+                    type: 'string',
+                },
             ]
         })
     }
 
-    run(msg, { target, spoils }) {
+    run(msg, { target, spoils , reason}) {
         var channelid = msg.channel.id
         if (channelid == (config.get('bounty_board_id'))){
         bountyRepo.createTable()
-            .then(() => bountyRepo.create(msg.author.username, target, spoils))
+            .then(() => bountyRepo.create(msg.author.username, target, spoils, reason))
             .then((data) => {
                 const embed = new RichEmbed()
                     .setDescription(`${msg.author.username} requires someone to crush his enemies!`)
                     .addField('Bounty ID', `${data.id}`, true)
                     .addField('Target', `${target}`, true)
                     .addField('Spoils', `${spoils}`, true)
+                    .addField('Reason', `${reason}`, true)
                 return msg.say(embed)
             })
         }
