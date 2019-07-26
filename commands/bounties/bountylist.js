@@ -37,6 +37,7 @@ module.exports = class BountylistCommand extends Command {
                         .addField('OfferedBy', `${bounty.OfferedBy}`, true)
                         .addField('Target', `${bounty.Target}`, true)
                         .addField('Spoils',`${bounty.Spoils}`, true)
+                        .addField('Reason', `${bounty.Reason}`, true)
                         return msg.say(embed)
                     })
                 }
