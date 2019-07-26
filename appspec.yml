@@ -1,18 +1,16 @@
 version: 0.0
 os: windows
 files:
-  - source: .\scripts
-    destination: C:\apps\scripts
   - source: .\
     destination: C:\apps\conan-bot
 hooks:
   BeforeInstall:
-    - location: C:\apps\scripts\node-stop.bat
+    - location: scripts\node-stop.bat
       timeout: 900
-    - location: C:\apps\scripts\cleanup.ps1
+    - location: scripts\cleanup.ps1
       timeout: 900
   AfterInstall:
-    - location: C:\apps\scripts\install.ps1
+    - location: scripts\install.ps1
       timeout: 900
-    - location: c:\apps\scripts\node-start.bat
+    - location: scripts\node-start.bat
       timeout: 900
