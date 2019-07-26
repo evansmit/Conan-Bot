@@ -5,6 +5,8 @@
     "main": "index.js",
     "author": "Michael Evans",
     "scripts": {
+        "install-windows-service": "winser -i",
+        "uninstall-windows-service": "winser -r",
         "pretest": "eslint --ignore-path .gitignore .",
         "test": "echo \"Error: no test specified\" && exit 1",
         "start": "node index.js"
