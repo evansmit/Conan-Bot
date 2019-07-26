@@ -1,0 +1,1 @@
+contains auth.json files for authing to bot.
