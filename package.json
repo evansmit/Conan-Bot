@@ -18,7 +18,8 @@
         "sqlite3": "latest",
         "bluebird": "latest",
         "node-schedule": "latest",
-        "convict": "^5.0.0"
+        "convict": "^5.0.0",
+        "winser": "latest"
     },
     "devDependencies": {
         "eslint": "^6.0.1",
