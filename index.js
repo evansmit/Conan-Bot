@@ -1,7 +1,7 @@
 const Commando = require('discord.js-commando')
 const path = require('path');
 const sqlite = require('sqlite')
-const { token } = require('./config/auth.json')
+const { token } = require('./auth/auth.json')
 var config = require('./config/config.js')
 
 const client = new Commando.Client({
