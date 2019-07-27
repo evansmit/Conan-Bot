@@ -2,7 +2,7 @@ const { Command } = require('discord.js-commando')
 const { RichEmbed } = require('discord.js');
 const config = require('../../config/config.js')
 const AppDAO = require('../../modules/dao')
-
+var commandchannel = '<#' + (config.get('bounty_board_id')) + '>'
 module.exports = class BountyremoveCommand extends Command {
     constructor(client) {
         super(client, {
@@ -22,12 +22,15 @@ module.exports = class BountyremoveCommand extends Command {
         })
     }
 
+    hasPermission(msg) {
+        if (msg.channel.id !== (config.get('bounty_board_id'))) return `Command is not valid in this channel. Please use in ${commandchannel}`;
+        return true;
+    }
+
     run(msg, { id }) {
         const dao = new AppDAO('./database/' + msg.guild.id + '-' + (config.get('env')) + '.sqlite3')
         const BountyRepository = require('../../modules/bounty_repository')
         const bountyRepo = new BountyRepository(dao)
-        var channelid = msg.channel.id
-        if (channelid == (config.get('bounty_board_id'))){
         bountyRepo.createTable()
             bountyRepo.getById(id)
                 .then((bounty) => {
@@ -37,5 +40,4 @@ module.exports = class BountyremoveCommand extends Command {
                 })
                 .then(() => bountyRepo.delete(id))
         }
-    }
 }

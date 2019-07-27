@@ -2,7 +2,7 @@ const { Command } = require('discord.js-commando')
 const { RichEmbed } = require('discord.js');
 const config = require('../../config/config.js')
 const AppDAO = require('../../modules/dao')
-
+var commandchannel = '<#' + (config.get('stop_and_identify_id')) + '>'
 module.exports = class MemberCommand extends Command {
     constructor(client) {
         super(client, {
@@ -23,12 +23,16 @@ module.exports = class MemberCommand extends Command {
             ]
         })
     }
+
+    hasPermission(msg) {
+      if (msg.channel.id !== (config.get('stop_and_identify_id'))) return `Command is not valid in this channel. Please use in ${commandchannel}`;
+      return true;
+  }
+
     run(msg, { id }) {
       const dao = new AppDAO('./database/' + msg.guild.id + '-' + (config.get('env')) + '.sqlite3')
       const MemberRepository = require('../../modules/member_repository')
       const MemberRepo = new MemberRepository(dao)
-      var channelid = msg.channel.id
-      if (channelid == (config.get('stop_and_identify_id'))){
         MemberRepo.createTable()
         .then(() => MemberRepo.getById(id)
           .then((member) => {
@@ -42,5 +46,4 @@ module.exports = class MemberCommand extends Command {
           .then(() => MemberRepo.delete(id))
         )
       }
-    }
 }
