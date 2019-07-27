@@ -2,7 +2,7 @@ const { Command } = require('discord.js-commando')
 const { RichEmbed } = require('discord.js');
 const config = require('../../config/config.js')
 const AppDAO = require('../../modules/dao')
-
+var commandchannel = '<#' + (config.get('clan_status_id')) + '>'
 module.exports = class RaidCommand extends Command {
     constructor(client) {
         super(client, {
@@ -16,12 +16,15 @@ module.exports = class RaidCommand extends Command {
         })
     }
 
+    hasPermission(msg) {
+        if (msg.channel.id !== (config.get('clan_status_id'))) return `Command is not valid in this channel. Please use in ${commandchannel}`;
+        return true;
+    }
+
     run(msg) {
       const dao = new AppDAO('./database/' + msg.guild.id + '-' + (config.get('env')) + '.sqlite3')
       const RaidRepository = require('../../modules/raid_repository')
       const rpRepo = new RaidRepository(dao)
-      var channelid = msg.channel.id
-      if (channelid == (config.get('clan_status_id'))){
       // Create table if it doesn't exist then create entry
       rpRepo.createTable()
         .then(() => rpRepo.getAll()
@@ -44,6 +47,5 @@ module.exports = class RaidCommand extends Command {
                 })
             }
         }))
-    }
     }
 }
