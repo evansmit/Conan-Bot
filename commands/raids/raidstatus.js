@@ -33,6 +33,7 @@ module.exports = class RaidCommand extends Command {
                 const embed = new RichEmbed()
                 .setTitle('Raid Protection List')
                 .setDescription('No Active Raid Protections found.')
+                return msg.say(embed)
             }
             if (rows !== 0) {
                 rows.forEach(row => {
