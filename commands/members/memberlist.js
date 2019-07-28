@@ -14,6 +14,7 @@ module.exports = class MemberCommand extends Command {
             description: 'Allows a user to search the list of Cascaders',
             examples: ['memberlist'],
             aliases: ['listmember'],
+            userPermissions: ['ADMINISTRATOR'],
             guildOnly: true,
         })
     }
@@ -34,12 +35,10 @@ module.exports = class MemberCommand extends Command {
               return msg.say(`Unable to find member history`)
             }
             if (rows !== 0) {
+              msg.say(`ID / PSN_ID / Discord_ID / Conan_Name / Clan`)
               rows.forEach(function(data) {
-                members += `${data.id} - ${data.pl_psn} - ${data.pl_discord} - ${data.pl_ign} - ${data.pl_clan} - ${data.pl_clanldr}\n`
+                return msg.say(`${data.id} ${data.pl_psn} ${data.pl_discord} ${data.pl_ign} ${data.pl_clan}`)
               })
-              const embed = new RichEmbed()
-              .addField('PSN / Discord / In-Game / Clan / Clan Leader', `${members}`)
-              return msg.say(embed)
             }
         }))
       }
