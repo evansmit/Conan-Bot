@@ -50,13 +50,13 @@ module.exports = class MemberCommand extends Command {
             .then(() => MemberRepo.create(pl_psn, msg.author.username, pl_ign, pl_clan, pl_clanldr))
             .then((data) => {
                 const embed = new RichEmbed()
-                    .setTitle(`Welcome ${msg.author.username} your now a Cascader!`)
+                    .setTitle(`Welcome ${msg.author.username} you're now a Cascader!`)
                     .addField('PSN ID', `${pl_psn}`, true)
                     .addField('Discord', `${msg.author.username}`, true)
                     .addField('Conan IGN', `${pl_ign}`, true)
                     .addField('Clan', `${pl_clan}`)
                     .addField('Clan Leader', `${pl_clanldr}`, true)
-               return msg.say(embed)
+                return msg.say(embed)
            })
     }
 }
