@@ -7,7 +7,7 @@ var config = require('./config/config.js')
 const client = new Commando.Client({
   commandPrefix: '!',
   owner: '216407004724330507',
-  disableEveryone: true,
+  disableEveryone: false,
   unknownCommandResponse: false
 })
 
@@ -40,18 +40,13 @@ var schedule = require('node-schedule')
 
 // Reminder for server reset
 schedule.scheduleJob((config.get('reset_remind_time')), function(){
-  client.channels.get((config.get('general_chat_id'))).send({embed: {
-    title: 'Daily Server Reset (12AM EST)',
-    description: '@everyone The server will reset in 10 minutes. Make sure you are somewhere safe. \n Remember no looting unconscious bodies for 30 minutes after reset and crashes',
-  }})
+  client.channels.get((config.get('general_chat_id'))).send(`Daily Server Reset at (12PM EST) \n @everyone The server will reset in 10 minutes. Make sure you are somewhere safe. \n Remember no looting unconscious bodies for 30 minutes after reset and crashes`)
 })
 // Welcome new members and direct to channels
 var readmefirst = '<#' + (config.get('read_me_first_id')) + '>'
 var stopandidentify = '<#' + (config.get('stop_and_identify_id')) + '>'
 client.on('guildMemberAdd', member => {
-  member.send({embed: {
-    description: `Welcome ${member} to Cascade Exiles! Please be sure to thoroughly read ${readmefirst} and then post in ${stopandidentify}.`,
-  }})
+  member.send(`Welcome ${member} to Cascade Exiles! Please be sure to thoroughly read ${readmefirst} and then post in ${stopandidentify} with the **!member** command.`)
 })
 
 client.login(token)
