@@ -1,8 +1,9 @@
 const { Command } = require('discord.js-commando')
 const { RichEmbed } = require('discord.js');
 const config = require('../../config/config.js')
-const AppDAO = require('../../modules/dao')
-var commandchannel = '<#' + (config.get('stop_and_identify_id')) + '>'
+const db_conn = require('../../modules/db_conn.js')
+var commandchannel = '<#' + (config.get('bot_commands_id')) + '>'
+var timeout = (config.get('arg_timeout'))
 module.exports = class MemberCommand extends Command {
     constructor(client) {
         super(client, {
@@ -13,28 +14,39 @@ module.exports = class MemberCommand extends Command {
             examples: ['memberremove', 'memberremove 2'],
             guildOnly: true,
             aliases: ['removemember'],
-            userPermissions: ['ADMINISTRATOR'],
             args: [
                 {
                     key: 'id',
                     prompt: 'Input the ID of the member you would like to remove?',
                     type: 'string',
+                    wait: timeout,
                 },
             ]
         })
     }
 
     hasPermission(msg) {
-      if (msg.channel.id !== (config.get('stop_and_identify_id'))) return `Command is not valid in this channel. Please use in ${commandchannel}`;
-      return true;
+      if (msg.member.roles.some(r=>["Mod Squad"].includes(r.name))) {//return `You do not have permission to run this command`;
+        return true;}
+      else{
+        return false;
+      }
   }
 
+    hasPermission(msg) {
+      if (msg.channel.id !== (config.get('bot_commands_id'))) {
+        msg.delete()
+        return `Must run commands in ${commandchannel}`
+        }
+      else{
+        return true}
+    }
+
     run(msg, { id }) {
-      const dao = new AppDAO('./database/' + msg.guild.id + '-' + (config.get('env')) + '.sqlite3')
       const MemberRepository = require('../../modules/member_repository')
-      const MemberRepo = new MemberRepository(dao)
+      const MemberRepo = new MemberRepository(db_conn)
         MemberRepo.createTable()
-        .then(() => MemberRepo.getById(id)
+        .then(() => MemberRepo.getById(msg.guild.id,id)
           .then((member) => {
             const embed = new RichEmbed()
             .setDescription(`${msg.author.username} has removed a cascader from the member list`)

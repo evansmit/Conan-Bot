@@ -8,6 +8,7 @@ class BountyRepository {
   createTable() {
     const sql = `CREATE TABLE IF NOT EXISTS bounties (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
+      guild_id TEXT,
       name TEXT,
       OfferedBy TEXT,
       Target TEXT,
@@ -15,24 +16,24 @@ class BountyRepository {
       Reason TEXT)`
     return this.dao.run(sql)
   }
-  create(OfferedBy, Target, Spoils, Reason) {
+  create(guild_id, OfferedBy, Target, Spoils, Reason) {
     return this.dao.run(
-      'INSERT INTO bounties (OfferedBy, Target, Spoils, Reason) VALUES (?, ?, ?, ?)',
-      [OfferedBy, Target, Spoils, Reason])
+      'INSERT INTO bounties (guild_id, OfferedBy, Target, Spoils, Reason) VALUES (?, ?, ?, ?, ?)',
+      [guild_id, OfferedBy, Target, Spoils, Reason])
   }
-  delete(id) {
+  delete(guild_id, id) {
     return this.dao.run(
-      `DELETE FROM bounties WHERE id = ${id}`,
+      `DELETE FROM bounties WHERE guild_id = ${guild_id} AND id = ${id}`,
     )
   }
-  getById(id) {
+  getById(guild_id, id) {
     return this.dao.get(
-      `SELECT * FROM bounties WHERE id = ${id}`,
+      `SELECT * FROM bounties WHERE guild_id = ${guild_id} AND id = ${id}`,
     )
   }
-  getAll() {
+  getAll(guild_id) {
     return this.dao.all(
-      'SELECT * FROM bounties',
+      `SELECT * FROM bounties WHERE guild_id = ${guild_id}`,
     )
   }
 }

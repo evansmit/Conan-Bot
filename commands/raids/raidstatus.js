@@ -1,8 +1,8 @@
 const { Command } = require('discord.js-commando')
 const { RichEmbed } = require('discord.js');
 const config = require('../../config/config.js')
-const AppDAO = require('../../modules/dao')
-var commandchannel = '<#' + (config.get('clan_status_id')) + '>'
+const db_conn = require('../../modules/db_conn.js')
+var commandchannel = '<#' + (config.get('bot_commands_id')) + '>'
 module.exports = class RaidCommand extends Command {
     constructor(client) {
         super(client, {
@@ -13,27 +13,40 @@ module.exports = class RaidCommand extends Command {
             examples: ['raidstatus'],
             aliases: ['raidlist', 'statusraid'],
             guildOnly: true,
+            userPermissions: ['ADMINISTRATOR'],
         })
     }
 
     hasPermission(msg) {
-        if (msg.channel.id !== (config.get('clan_status_id'))) return `Command is not valid in this channel. Please use in ${commandchannel}`;
-        return true;
+        if (msg.member.roles.some(r=>["Mod Squad"].includes(r.name))) {
+          return true;}
+        else{
+          return false;
+        }
     }
 
+      hasPermission(msg) {
+        if (msg.channel.id !== (config.get('bot_commands_id'))) {
+          msg.delete()
+          return `Must run commands in ${commandchannel}`
+          }
+        else{
+          return true}
+      }
+
     run(msg) {
-      const dao = new AppDAO('./database/' + msg.guild.id + '-' + (config.get('env')) + '.sqlite3')
       const RaidRepository = require('../../modules/raid_repository')
-      const rpRepo = new RaidRepository(dao)
+      const rpRepo = new RaidRepository(db_conn)
+      let guild_id = msg.guild.id
       // Create table if it doesn't exist then create entry
       rpRepo.createTable()
-        .then(() => rpRepo.getAll()
+        .then(() => rpRepo.getAll(guild_id)
             .then((rows) => {
             if (rows == 0) {
                 const embed = new RichEmbed()
                 .setTitle('Raid Protection List')
                 .setDescription('No Active Raid Protections found.')
-                return msg.say(embed)
+                return msg.author.send(embed)
             }
             if (rows !== 0) {
                 rows.forEach(row => {
@@ -44,7 +57,7 @@ module.exports = class RaidCommand extends Command {
                     .addField('End Date', `${row.EndDate}`, true)
                     .addField('IniatedBy', `${row.CreatedBy}`, true)
                     .setFooter(`ID: ${row.id}`)
-                    return msg.say(embed)
+                    return msg.author.send(embed)
                 })
             }
         }))

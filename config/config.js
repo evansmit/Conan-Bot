@@ -59,6 +59,31 @@ var config = convict({
     format: String,
     default: '',
   },
+  role_cascader_id: {
+    doc: 'role id for cascader role',
+    format: String,
+    default: '',
+  },
+  bot_commands_id: {
+    doc: 'channel id for bot commands',
+    format: String,
+    default: ''
+  },
+  happy_little_dudes_id: {
+    doc: 'id for happy little dudes channel',
+    format: String,
+    default: ''
+  },
+  protection_system_id: {
+    doc: 'id for protection_system channel',
+    format: String,
+    default: ''
+  },
+  arg_timeout: {
+    doc: 'argument timeout variable',
+    format: Number,
+    default: '30'
+  }
 })
 
 // Load environment dependent configuration
