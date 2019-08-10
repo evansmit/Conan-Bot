@@ -70,7 +70,7 @@ module.exports = class MemberCommand extends Command {
                     .addField('Clan', `${pl_clan}`)
                     .addField('Clan Leader', `${pl_clanldr}`, true)
                 msg.member.setNickname(`${pl_psn} (${pl_clan})`)
-                let role = msg.guild.roles.find(r => r.name === "Cascader");
+                let role = msg.guild.roles.find(r => r.name === "Cascaders");
                 msg.member.addRole(role).catch(console.error)
                 return this.client.channels.get((config.get('stop_and_identify_id'))).send(embed)
            })
