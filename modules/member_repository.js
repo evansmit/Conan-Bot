@@ -37,8 +37,8 @@ class MemberRepository {
     )
   }
   getById(guild_id, id) {
-    return this.dao.run(
-      `SELECT * FROM members WHERE guild_id = ${guild_id} AND id = ${id}`,
+    return this.dao.all(
+      `SELECT * FROM members WHERE guild_id like '${guild_id}' AND id like '${id}' LIMIT 1`,
     )
   }
   getAll(guild_id) {

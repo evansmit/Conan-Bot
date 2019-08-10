@@ -45,17 +45,26 @@ module.exports = class MemberCommand extends Command {
     run(msg, { id }) {
       const MemberRepository = require('../../modules/member_repository')
       const MemberRepo = new MemberRepository(db_conn)
+      let guild_id = msg.guild.id
         MemberRepo.createTable()
-        .then(() => MemberRepo.getById(msg.guild.id,id)
-          .then((member) => {
-            const embed = new RichEmbed()
-            .setDescription(`${msg.author.username} has removed a cascader from the member list`)
-            .addField('PSN ID', `${member.pl_psn}`, true)
-            .addField('Discord', `${member.pl_discord}`, true)
-            .addField('Conan IGN', `${member.pl_ign}`, true)
-            return msg.say(embed)
+        .then(() => MemberRepo.getById(guild_id, id)
+          .then((rows) => {
+            if (rows == 0) {
+              return msg.author.send(`Member ID: ${id} does not exist in the repository for Guild ID: ${guild_id}.`)
+            }
+            else {
+              rows.forEach(function(member) {
+                const embed = new RichEmbed()
+                .setDescription(`${msg.author.username} has removed a cascader from the member list`)
+                .addField('ID', `${member.id}`, true)
+                .addField('PSN ID', `${member.pl_psn}`, true)
+                .addField('Discord', `${member.pl_discord}`, true)
+                .addField('Conan IGN', `${member.pl_ign}`, true)
+                MemberRepo.delete(guild_id, id)
+                return msg.say(embed)
+              })
+            }
           })
-          .then(() => MemberRepo.delete(id))
         )
       }
 }

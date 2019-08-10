@@ -43,10 +43,11 @@ module.exports = class MemberCommand extends Command {
     }
 
     run(msg, { term }) {
+      let guild_id = msg.guild.id
       const MemberRepository = require('../../modules/member_repository')
       const MemberRepo = new MemberRepository(db_conn)
         MemberRepo.createTable()
-        .then(() => MemberRepo.find(msg.guild.id, term)
+        .then(() => MemberRepo.find(guild_id, term)
           .then((rows) => {
             if (rows == 0) {
               return msg.author.send(`Unable to find history of ${term}`)
