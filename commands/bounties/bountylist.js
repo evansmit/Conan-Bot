@@ -1,8 +1,8 @@
 const { Command } = require('discord.js-commando')
 const { RichEmbed } = require('discord.js');
 const config = require('../../config/config.js')
-const AppDAO = require('../../modules/dao')
-var commandchannel = '<#' + (config.get('bounty_board_id')) + '>'
+const db_conn = require('../../modules/db_conn.js')
+var commandchannel = '<#' + (config.get('bot_commands_id')) + '>'
 module.exports = class BountylistCommand extends Command {
     constructor(client) {
         super(client, {
@@ -12,20 +12,32 @@ module.exports = class BountylistCommand extends Command {
             description: 'Allows a user to list open bounties',
             examples: ['bountylist'],
             guildOnly: true,
+            userPermissions: ['ADMINISTRATOR'],
         })
     }
 
     hasPermission(msg) {
-        if (msg.channel.id !== (config.get('bounty_board_id'))) return `Command is not valid in this channel. Please use in ${commandchannel}`;
-        return true;
+        if (msg.member.roles.some(r=>["Cascader","Mod Squad"].includes(r.name))) {
+          return true;}
+        else{
+          return false;
+        }
     }
 
+      hasPermission(msg) {
+        if (msg.channel.id !== (config.get('bot_commands_id'))) {
+          msg.delete()
+          return `Must run commands in ${commandchannel}`
+          }
+        else{
+          return true}
+      }
+
     run(msg) {
-        const dao = new AppDAO('./database/' + msg.guild.id + '-' + (config.get('env')) + '.sqlite3')
         const BountyRepository = require('../../modules/bounty_repository')
-        const bountyRepo = new BountyRepository(dao)
+        const bountyRepo = new BountyRepository(db_conn)
         bountyRepo.createTable()
-            .then(() => bountyRepo.getAll())
+            .then(() => bountyRepo.getAll(msg.guild.id))
             .then((rows) => {
                 if (rows == 0) {
                     const embed = new RichEmbed()
@@ -41,7 +53,7 @@ module.exports = class BountylistCommand extends Command {
                         .addField('Target', `${bounty.Target}`, true)
                         .addField('Spoils',`${bounty.Spoils}`, true)
                         .addField('Reason', `${bounty.Reason}`, true)
-                        return msg.say(embed)
+                        return msg.author.send(embed)
                     })
                 }
             })

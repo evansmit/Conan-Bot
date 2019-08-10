@@ -8,6 +8,7 @@ class rpRepository {
   createTable() {
     const sql = `CREATE TABLE IF NOT EXISTS raidprotection (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
+      guild_id TEXT,
       ProtectionType TEXT,
       Clan TEXT,
       StartDate Text,
@@ -15,27 +16,27 @@ class rpRepository {
       CreatedBy TEXT)`
     return this.dao.run(sql)
   }
-  create(ProtectionType, Clan, StartDate, EndDate, CreatedBy) {
+  create(guild_id, ProtectionType, Clan, StartDate, EndDate, CreatedBy) {
     return this.dao.run(
-      `INSERT INTO raidprotection (ProtectionType, Clan, StartDate, EndDate, CreatedBy)
-      VALUES (?, ?, ?, ?, ?)`,
-      [ProtectionType, Clan, StartDate, EndDate, CreatedBy]
+      `INSERT INTO raidprotection (guild_id, ProtectionType, Clan, StartDate, EndDate, CreatedBy)
+      VALUES (?, ?, ?, ?, ?, ?)`,
+      [guild_id, ProtectionType, Clan, StartDate, EndDate, CreatedBy]
     )
   }
 
-  delete(id) {
+  delete(guild_id, id) {
     return this.dao.run(
-      `DELETE FROM raidprotection WHERE id = ${id}`,
+      `DELETE FROM raidprotection WHERE guild_id = ${guild_id} AND id = ${id}`,
     )
   }
-  getById(id) {
+  getById(guild_id, id) {
     return this.dao.get(
-      `SELECT * FROM raidprotection WHERE id = ${id}`,
+      `SELECT * FROM raidprotection WHERE guild_id = ${guild_id} AND id = ${id}`,
     )
   }
-  getAll() {
+  getAll(guild_id) {
     return this.dao.all(
-      'SELECT * FROM raidprotection',
+      `SELECT * FROM raidprotection WHERE guild_id = ${guild_id}`,
     )
   }
 }

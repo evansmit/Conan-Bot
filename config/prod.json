@@ -2,11 +2,16 @@
     "prefix": "!",
     "general_chat_id": "593771172466786305",
     "bounty_board_id": "590973852704833556",
+    "happy_little_dudes_id": "593951410379423765",
     "read_me_first_id": "573182557328244746",
     "stop_and_identify_id": "582446687348457482",
     "clan_status_id": "596110129489903628",
     "clan_intel_id": "569720650667786241",
     "guild_mods": "Mods Squad",
     "guild_members": "Cascaders",
-    "reset_remind_time": "50 10 ? * *"
+    "reset_remind_time": "50 10 ? * *",
+    "role_cascader_id": "569418748952576001",
+    "bot_commands_id": "608694105723371541",
+    "protection_system_id": "607569063811612683",
+    "arg_timeout": "120"
 }

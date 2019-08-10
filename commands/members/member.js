@@ -1,8 +1,9 @@
 const { Command } = require('discord.js-commando')
 const { RichEmbed } = require('discord.js');
 const config = require('../../config/config.js')
-const AppDAO = require('../../modules/dao')
-var commandchannel = '<#' + (config.get('stop_and_identify_id')) + '>'
+const db_conn = require('../../modules/db_conn.js')
+var commandchannel = '<#' + (config.get('bot_commands_id')) + '>'
+var timeout = (config.get('arg_timeout'))
 module.exports = class MemberCommand extends Command {
     constructor(client) {
         super(client, {
@@ -12,51 +13,66 @@ module.exports = class MemberCommand extends Command {
             description: 'Allows a user to be added as a new member of Cascade Exiles',
             examples: ['member'],
             guildOnly: true,
+            aliases: ['peacemakersmark'],
             args: [
                 {
                     key: 'pl_psn',
                     prompt: 'Welcome to Cascade Exiles. Lets get you setup as a new member. What is your PSN ID?',
                     type: 'string',
+                    wait: timeout,
                 },
                 {
                     key: 'pl_ign',
                     prompt: 'What is your Conan Exiles In-Game Name?',
                     type: 'string',
+                    wait: timeout,
                 },
                 {
                     key: 'pl_clan',
-                    prompt: 'All members are required to be in a clan, even solo players. What is your clan name?',
+                    prompt: 'All members are required to be in a clan, even solo players. What is your clan name? (14 character max)',
                     type: 'string',
+                    wait: timeout,
+                    validate: text => {
+                        if (text.length < 14) return true
+                        return 'Clan name cannot be longer than 14 characters. Please shorten and/or abbreviate the name'
+                    },
                 },
                 {
                     key: 'pl_clanldr',
                     prompt: `Who is the leader of the clan?`,
                     type: 'string',
+                    wait: timeout,
                 }
             ]
         })
     }
 
     hasPermission(msg) {
-        if (msg.channel.id !== (config.get('stop_and_identify_id'))) return `Command is not valid in this channel. Please use in ${commandchannel}`;
-        return true;
-    }
+        if (msg.channel.id !== (config.get('bot_commands_id'))) {
+          msg.delete()
+          return `Must run commands in ${commandchannel}`
+          }
+        else{
+          return true}
+      }
 
     run(msg, { pl_psn, pl_ign, pl_clan, pl_clanldr }) {
-      const dao = new AppDAO('./database/' + msg.guild.id + '-' + (config.get('env')) + '.sqlite3')
-      const MemberRepository = require('../../modules/member_repository')
-      const MemberRepo = new MemberRepository(dao)
+        const MemberRepository = require('../../modules/member_repository')
+        const MemberRepo = new MemberRepository(db_conn)
         MemberRepo.createTable()
-            .then(() => MemberRepo.create(pl_psn, msg.author.username, pl_ign, pl_clan, pl_clanldr))
+            .then(() => MemberRepo.create(msg.guild.id, pl_psn, msg.author.username, pl_ign, pl_clan, pl_clanldr))
             .then((data) => {
                 const embed = new RichEmbed()
-                    .setTitle(`Welcome ${msg.author.username} you're now a Cascader!`)
+                    .setTitle(`A new cascader has joined!`)
                     .addField('PSN ID', `${pl_psn}`, true)
                     .addField('Discord', `${msg.author.username}`, true)
                     .addField('Conan IGN', `${pl_ign}`, true)
                     .addField('Clan', `${pl_clan}`)
                     .addField('Clan Leader', `${pl_clanldr}`, true)
-                return msg.say(embed)
+                msg.member.setNickname(`${pl_psn} (${pl_clan})`)
+                let role = msg.guild.roles.find(r => r.name === "Cascader");
+                msg.member.addRole(role).catch(console.error)
+                return this.client.channels.get((config.get('stop_and_identify_id'))).send(embed)
            })
     }
 }

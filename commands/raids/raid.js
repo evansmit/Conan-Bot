@@ -1,8 +1,9 @@
 const { Command } = require('discord.js-commando')
 const { RichEmbed } = require('discord.js');
 const config = require('../../config/config.js')
-const AppDAO = require('../../modules/dao')
-var commandchannel = '<#' + (config.get('clan_status_id')) + '>'
+const db_conn = require('../../modules/db_conn.js')
+var commandchannel = '<#' + (config.get('bot_commands_id')) + '>'
+var timeout = (config.get('arg_timeout'))
 module.exports = class RaidCommand extends Command {
     constructor(client) {
         super(client, {
@@ -15,37 +16,60 @@ module.exports = class RaidCommand extends Command {
             args: [
                 {
                     key: 'type',
-                    prompt: 'What type of protection do you pray for from the Gods? \n newbie \n raid \n hiatus \n event',
+                    prompt: 'What type of protection do you require? \n new \n raided \n hiatus \n event',
                     type: 'string',
+                    wait: timeout,
                     validate: type => {
-                       if (type == ('event')||('raid')||('newbie')||('hiatus')) return true
-                       return 'Your type of protection is not allowed. Please input a valid selection'
+                       switch (type) {
+                         case 'event':
+                          return true
+                         case 'raided':
+                          return true
+                         case 'new':
+                          return true
+                         case 'hiatus':
+                          return true
+                         default: return 'The selection you provided does not match a valid option. Please input a valid choice verbatim. \n new \n raided \n hiatus \n event'
+                        }
                     }
                 },
                 {
                     key: 'clan',
-                    prompt: 'What clan requests the God\'s protection?',
+                    prompt: 'What clan needs protection?',
                     type: 'string',
+                    wait: timeout,
                 },
             ]
         })
     }
 
     hasPermission(msg) {
-      if (msg.channel.id !== (config.get('clan_status_id'))) return `Command is not valid in this channel. Please use in ${commandchannel}`;
-      return true;
+      if (msg.member.roles.some(r=>["Cascader","Mod Squad"].includes(r.name))) {
+        return true;}
+      else{
+        return false;
+      }
   }
 
+    hasPermission(msg) {
+      if (msg.channel.id !== (config.get('bot_commands_id'))) {
+        msg.delete()
+        return `Must run commands in ${commandchannel}`
+        }
+      else{
+        return true}
+    }
+
     run(msg, { type, clan }) {
-      const dao = new AppDAO('./database/' + msg.guild.id + '-' + (config.get('env')) + '.sqlite3')
+      type = type.toLowerCase()
       const RaidRepository = require('../../modules/raid_repository')
-      const rpRepo = new RaidRepository(dao)
+      const rpRepo = new RaidRepository(db_conn)
       var Days = ''
         switch (type) {
-          case 'newbie':
+          case 'new':
             Days = Number('5')
             break
-          case 'raid':
+          case 'raided':
             Days = Number('3')
             break
           case 'event':
@@ -62,8 +86,9 @@ module.exports = class RaidCommand extends Command {
       startdate = startdate.toString().split(' ').slice(0, 4).join(' ')
       enddate = enddate.toString().split(' ').slice(0, 4).join(' ')
       // Create table if it doesn't exist then create entry
+      let guild_id = msg.guild.id
       rpRepo.createTable()
-        .then(() => rpRepo.create(type, clan, startdate, enddate, msg.author.username))
+        .then(() => rpRepo.create(guild_id, type, clan, startdate, enddate, msg.author.username))
         .then((data) => {
             const embed = new RichEmbed()
                 .setTitle(`Raid protection initiated by ${msg.author.username}`)
@@ -71,7 +96,8 @@ module.exports = class RaidCommand extends Command {
                 .addField('Protection Type', `${type}`, true)
                 .addField('Start Date', `${startdate}`, true)
                 .addField('End Date', `${enddate}`, true)
-                return msg.say(embed)
+                .setFooter(`ID: ${data.id}`)
+                return this.client.channels.get((config.get('clan_status_id'))).send(embed)
         })
       }
 }

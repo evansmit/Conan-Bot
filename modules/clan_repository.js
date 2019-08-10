@@ -9,34 +9,26 @@ class ClanRepository {
     const sql = `
       CREATE TABLE IF NOT EXISTS clans (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
+      guild_id TEXT,
       name TEXT,
       leaderpsn TEXT,
       leaderdiscord TEXT,
       status TEXT)`
     return this.dao.run(sql)
   }
-  create(name, leaderpsn, leaderdiscord, status) {
+  create(guild_id, name, leaderpsn, leaderdiscord, status) {
     return this.dao.run(
-      'INSERT INTO clans (name, leaderpsn, leaderdiscord, status) VALUES (?, ?, ?, ?)',
-      [name, leaderpsn, leaderdiscord, status])
+      `INSERT INTO clans (guild_id, name, leaderpsn, leaderdiscord, status) VALUES (?, ?, ?, ?, ?)`,
+      [guild_id, name, leaderpsn, leaderdiscord, status])
   }
-  update(column, value, id) {
-    switch (column) {
-      case 'status':
-        return this.dao.run(
-          'UPDATE clans SET status = ? WHERE id = ?',
-          [id, column, value]
-        )
-    }
-  }
-  delete(id) {
+  delete(guild_id,id) {
     return this.dao.run(
-      `DELETE FROM clans WHERE id = ${id}`,
+      `DELETE FROM clans WHERE guild_id = ${guild_id} AND id = ${id}`,
     )
   }
-  getAll() {
+  getAll(guild_id) {
     return this.dao.all(
-      'SELECT * FROM clans',
+      `SELECT * FROM clans WHERE guild_id = ${guild_id}`,
     )
   }
 }
