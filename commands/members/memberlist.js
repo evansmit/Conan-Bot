@@ -46,9 +46,9 @@ module.exports = class MemberCommand extends Command {
 
             }
             if (rows !== 0) {
-              msg.author.send(`ID / PSN_ID / Discord_ID / Conan_Name / Clan`)
+              msg.author.send(`PSN_ID / Discord_ID / Conan_Name / Clan`)
               rows.forEach(function(data) {
-                msg.author.send(`${data.id} ${data.pl_psn} ${data.pl_discord} ${data.pl_ign} ${data.pl_clan}`)
+                msg.author.send(`${data.pl_psn} ${data.pl_discord} ${data.pl_ign} ${data.pl_clan}`)
               })
             }
         }))

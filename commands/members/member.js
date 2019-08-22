@@ -7,13 +7,13 @@ var timeout = (config.get('arg_timeout'))
 module.exports = class MemberCommand extends Command {
     constructor(client) {
         super(client, {
-            name: 'member',
+            name: 'peacemakersmark',
             group: 'members',
-            memberName: 'member',
+            memberName: 'peacemakersmark',
             description: 'Allows a user to be added as a new member of Cascade Exiles',
             examples: ['member'],
             guildOnly: true,
-            aliases: ['peacemakersmark'],
+            //aliases: ['peacemakersmark'],
             args: [
                 {
                     key: 'pl_psn',
