@@ -8,10 +8,9 @@ class MemberRepository {
   createTable() {
     const sql = `
       CREATE TABLE IF NOT EXISTS members (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
       guild_id TEXT,
       pl_psn TEXT,
-      pl_discord TEXT,
+      pl_discord TEXT PRIMARY KEY,
       pl_ign TEXT,
       pl_clan TEXT,
       pl_clanldr TEXT)`
@@ -19,26 +18,17 @@ class MemberRepository {
   }
   create(guild_id, pl_psn, pl_discord, pl_ign, pl_clan, pl_clanldr) {
     return this.dao.run(
-      'INSERT INTO members (guild_id, pl_psn, pl_discord, pl_ign, pl_clan, pl_clanldr) VALUES (?, ?, ?, ?, ?, ?)',
+      'REPLACE INTO members (guild_id, pl_psn, pl_discord, pl_ign, pl_clan, pl_clanldr) VALUES (?, ?, ?, ?, ?, ?)',
       [guild_id, pl_psn, pl_discord, pl_ign, pl_clan, pl_clanldr])
   }
-  // update(column, value, id) {
-  // switch (column) {
-  //  case 'status':
-  // return this.dao.run(
-  // 'UPDATE members SET status = ? WHERE id = ?',
-  // [id, column, value]
-  // )
-  // }
-  // }
-  delete(guild_id, id) {
+  delete(guild_id, pl_discord) {
     return this.dao.run(
-      `DELETE FROM members WHERE guild_id = ${guild_id} AND id = ${id}`,
+      `DELETE FROM members WHERE guild_id = '${guild_id}' AND pl_discord = '${pl_discord}'`,
     )
   }
-  getById(guild_id, id) {
+  getById(guild_id, pl_discord) {
     return this.dao.all(
-      `SELECT * FROM members WHERE guild_id like '${guild_id}' AND id like '${id}' LIMIT 1`,
+      `SELECT * FROM members WHERE guild_id like '${guild_id}' AND pl_discord like '${pl_discord}' LIMIT 1`,
     )
   }
   getAll(guild_id) {

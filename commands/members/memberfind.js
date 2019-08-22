@@ -53,9 +53,9 @@ module.exports = class MemberCommand extends Command {
               return msg.author.send(`Unable to find history of ${term}`)
             }
             if (rows !== 0) {
-              msg.author.send(`ID / PSN_ID / Discord_ID / Conan_Name / Clan`)
+              msg.author.send(`PSN_ID / Discord_ID / Conan_Name / Clan / Clan Leader`)
               rows.forEach(function(data) {
-                return msg.author.send(`${data.id} ${data.pl_psn} ${data.pl_discord} ${data.pl_ign} ${data.pl_clan}`)
+                return msg.author.send(`${data.pl_psn} ${data.pl_discord} ${data.pl_ign} ${data.pl_clan} ${data.pl_clanldr}`)
               })
             }
         }))
