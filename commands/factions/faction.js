@@ -58,6 +58,7 @@ module.exports = class FactionCommand extends Command {
                     .addField('Faction', `${pl_faction}`)
                     .addField('Focus', `${pl_focus}`)
                     .addField('Friends', `${pl_friends}`)
+                    msg.reply(`You are all done. Thanks!`)
                     return this.client.channels.get((config.get('faction_sign_in'))).send(embed)
         //this.client.channels.get((config.get('faction_sign_in'))).send(`---------------\nPSN ID: ${pl_psn}\nDiscord: ${msg.author.username}\nFaction: ${pl_faction}\nFocus: ${pl_focus}\nFriends: ${pl_friends}\n---------------`)
     }

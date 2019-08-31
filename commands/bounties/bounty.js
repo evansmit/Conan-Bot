@@ -66,6 +66,7 @@ module.exports = class BountyCommand extends Command {
                     .addField('Target', `${target}`, true)
                     .addField('Spoils', `${spoils}`, true)
                     .addField('Reason', `${reason}`, true)
+                    msg.reply(`You are all done. Thanks!`)
                     return this.client.channels.get((config.get('bounty_board_id'))).send(embed)
             })
         }

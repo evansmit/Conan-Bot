@@ -72,6 +72,7 @@ module.exports = class MemberCommand extends Command {
                 msg.member.setNickname(`${pl_psn} (${pl_clan})`)
                 let role = msg.guild.roles.find(r => r.name === "Cascader");
                 msg.member.addRole(role).catch(console.error)
+                msg.reply(`You are all done. Thanks!`)
                 return this.client.channels.get((config.get('stop_and_identify_id'))).send(embed)
            })
     }
