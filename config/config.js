@@ -79,6 +79,11 @@ var config = convict({
     format: String,
     default: ''
   },
+  faction_sign_in: {
+    doc: 'id for faction_sign_in channel',
+    format: String,
+    default: ''
+  },
   arg_timeout: {
     doc: 'argument timeout variable',
     format: Number,
