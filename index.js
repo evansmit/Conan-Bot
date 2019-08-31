@@ -19,6 +19,7 @@ client.registry
     ['bounties', 'bounty commands group'],
     ['members', 'member commands group'],
     ['raids', 'raid protection commands group'],
+    ['factions', 'setup faction wars'],
   ])
 
   // Registers all built-in groups, commands, and argument types
