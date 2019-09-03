@@ -50,12 +50,12 @@ schedule.scheduleJob((config.get('reset_remind_time')), function(){
 let readmefirst = '<#' + (config.get('read_me_first_id')) + '>'
 let happydudes = '<#' + (config.get('happy_little_dudes_id')) + '>'
 let bot_commands = '<#' + (config.get('bot_commands_id')) + '>'
-let protection_system = '<#' + (config.get('protection_system_id')) + '>'
+let domination_rules = '<#' + (config.get('domination_rules')) + '>'
 client.on('guildMemberAdd', member => {
   //member.send(`Welcome to Cascade Exiles! Please be sure to thoroughly read ${readmefirst} and ${happydudes}. There are key words hidden within the channels that will need to be posted in the ${bot_commands} channel as a single word with an ! at the begining.`)
   //member.send('If the first word is "key" and the second word is "master", you would enter: ```!keymaster``` In #bot_commands channel')
   member.send(`
-  Welcome to **Cascade Exiles** Chill & Mature PvP! We hate to overload you with paperwork, but being familiar with server policy is important. Please take a few minutes to read our rules in ${readmefirst}, ${happydudes}, and ${protection_system}. There are key words hidden within these three channels that will need to be combined in the ${bot_commands} channel as a single word with an **!** at the beginning.
+  Welcome to **Cascade Exiles** Chill & Mature PvP! We hate to overload you with paperwork, but being familiar with server policy is important. Please take a few minutes to read our rules in ${readmefirst}, ${happydudes}, and ${domination_rules}. There are key words hidden within these three channels that will need to be combined in the ${bot_commands} channel as a single word with an **!** at the beginning.
 
 For example, if the first word is "key," the second word is "master", and the third word is "chief," you would enter:` +
 '```!keymasterchief```' +

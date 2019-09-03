@@ -1,6 +1,6 @@
 {
     "prefix": "!",
-    "general_chat_id": "593771172466786305",
+    "general_chat_id": "618444604479504394",
     "bounty_board_id": "590973852704833556",
     "happy_little_dudes_id": "593951410379423765",
     "read_me_first_id": "573182557328244746",
@@ -13,6 +13,7 @@
     "role_cascader_id": "569418748952576001",
     "bot_commands_id": "608694105723371541",
     "protection_system_id": "607569063811612683",
+    "domination_rules": "618219897725517825",
     "faction_sign_in": "617351221308686358",
     "arg_timeout": "120"
 }
