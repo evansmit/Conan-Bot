@@ -63,7 +63,7 @@ module.exports = class FactionCommand extends Command {
                     .addField('Discord', `${msg.author.username}`)
                     .addField('Character Name', `${pl_ign}`)
                     .addField('Faction', `${pl_faction}`)
-                    .addField('Focus', `${pl_focus}`)
+                    .addField('Play Style', `${pl_focus}`)
                     .addField('Friends', `${pl_friends}`)
                     msg.reply(`You are all done. Thanks!`)
                     msg.member.setNickname(`${pl_psn} ()`)
