@@ -12,7 +12,7 @@ module.exports = class FactionCommand extends Command {
             description: 'Allows a user to provide info for faction wars',
             examples: ['member'],
             guildOnly: true,
-            aliases: ['pleasebecool'],
+            aliases: ['pleasebecool','peacemakersmark'],
             args: [
                 {
                     key: 'pl_psn',
