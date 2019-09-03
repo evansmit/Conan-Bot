@@ -12,7 +12,7 @@ module.exports = class FactionCommand extends Command {
             description: 'Allows a user to provide info for faction wars',
             examples: ['member'],
             guildOnly: true,
-            aliases: ['peacemakersmark'],
+            aliases: ['pleasebecool'],
             args: [
                 {
                     key: 'pl_psn',
@@ -22,7 +22,7 @@ module.exports = class FactionCommand extends Command {
                 },
                 {
                     key: 'pl_ign',
-                    prompt: 'What is your Conan Exiles In-Game Name?',
+                    prompt: 'What is your Conan Exiles Character Name?',
                     type: 'string',
                     wait: timeout,
                 },
@@ -34,7 +34,7 @@ module.exports = class FactionCommand extends Command {
                 },
                 {
                     key: 'pl_focus',
-                    prompt: `What is your Focus in Conan Exiles? You may choose one or more: \n Building, Raiding, Defending, Resourcing, Exploring, Organizing, Trading, No Preference.`,
+                    prompt: `What is your play style in Conan Exiles? You may choose one or more: \n Building, Raiding, Defending, Resourcing, Exploring, Organizing, Trading, No Preference.`,
                     type: 'string',
                     wait: timeout,
                 },
@@ -61,7 +61,7 @@ module.exports = class FactionCommand extends Command {
         const embed = new RichEmbed()
                     .addField('PSN ID', `${pl_psn}`)
                     .addField('Discord', `${msg.author.username}`)
-                    .addField('Conan Name', `${pl_ign}`)
+                    .addField('Character Name', `${pl_ign}`)
                     .addField('Faction', `${pl_faction}`)
                     .addField('Focus', `${pl_focus}`)
                     .addField('Friends', `${pl_friends}`)
