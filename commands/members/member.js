@@ -13,7 +13,7 @@ module.exports = class MemberCommand extends Command {
             description: 'Allows a user to be added as a new member of Cascade Exiles',
             examples: ['member'],
             guildOnly: true,
-            aliases: ['peacemakersmark'],
+            //aliases: ['peacemakersmark'],
             args: [
                 {
                     key: 'pl_psn',
@@ -69,7 +69,7 @@ module.exports = class MemberCommand extends Command {
                     .addField('Conan IGN', `${pl_ign}`, true)
                     .addField('Clan', `${pl_clan}`)
                     .addField('Clan Leader', `${pl_clanldr}`, true)
-                msg.member.setNickname(`${pl_psn} (${pl_clan})`)
+                msg.member.setNickname(`${pl_psn} ()`)
                 let role = msg.guild.roles.find(r => r.name === "Cascader");
                 msg.member.addRole(role).catch(console.error)
                 msg.reply(`You are all done. Thanks!`)
