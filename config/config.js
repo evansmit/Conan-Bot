@@ -84,6 +84,11 @@ var config = convict({
     format: String,
     default: ''
   },
+  domination_rules: {
+    doc: 'id for domination_rules channel',
+    format: String,
+    default: '',
+  },
   arg_timeout: {
     doc: 'argument timeout variable',
     format: Number,
